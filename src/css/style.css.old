@@ -1,0 +1,98 @@
+body {
+  width: 640px;
+  margin: 10px;
+  font-size: 13px;
+  color: #5C607C;
+  font-family: Consolas, Microsoft Yahei;
+}
+
+section {
+  margin: 0px 20px;
+}
+
+section section:FIRST-CHILD {
+  margin-left: 0px;
+}
+
+section section:LAST-CHILD {
+  margin-right: 0px;
+}
+
+section.half-width {
+  width: 280px;
+  float: left;
+}
+
+hgroup {
+  position: relative;
+  margin: 1em -10px;
+  border-bottom-style: double;
+  clear: both;
+}
+
+hgroup.h2 {
+  padding: 0px 18px;
+  border-width: 3px;
+  border-color: #137;
+}
+
+hgroup.h3 {
+  padding: 0px 10px;
+  border-width: 1px;
+  border-top-style: solid;
+  border-top-color: transparent;
+  border-bottom-color: #37c;
+}
+
+hgroup h2, hgroup h3 {
+  margin: 8px 0;
+}
+
+hgroup h2 {
+  font-size: 1.8em;
+  color: #137;
+}
+
+hgroup h3 {
+  font-size: 1.5em;
+  color: #37c;
+}
+
+hgroup ul.button-list {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  margin: 8px 0px;
+  list-style: none;
+}
+
+hgroup.h3 ul.button-list {
+  right: 0px;
+}
+
+hgroup ul.button-list li {
+  float: left;
+  margin: 0px 10px;
+}
+
+.-ic-text-button- {
+  margin: -5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.-ic-text-button-:hover {
+  background-color: rgba(0,127,255,.2);
+}
+
+strong {
+  color: #333;
+}
+
+.red {
+  color: #f33;
+}
+
+.orange {
+  color: #fc3;
+}

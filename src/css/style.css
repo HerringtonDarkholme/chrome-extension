@@ -1,0 +1,131 @@
+/* css style */
+.cssCompareBtn{
+  /*background-color: WhiteSmoke;*/
+  background: rgba(220,220,220,0.2);
+  border: 1px solid #D2D2D2;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2),0 0 5px rgba(33,33,33,0.8);
+  border-radius: 4px; 
+  width: 41px;
+  height: 41px; 
+  position: fixed;
+  top: 45%;
+  right: 0px;
+}
+
+.cssBtnGreen{
+  background: -webkit-linear-gradient(top, #b6e026 0%,#abdc28 100%);
+  /*background-color:springGreen;*/
+  -webkit-transition: background 0.5s;
+  border: 1px solid #DDD;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+  border-radius: 15px; 
+  width: 30px;
+  height: 30px; 
+  top:5px;
+  left: 5px;
+  position: absolute;
+}
+
+.cssBtnGreen:hover{
+  background: -webkit-linear-gradient(top, #d2ff52 0%,#91e842 100%);
+  -webkit-transition: background 2s;
+}
+
+.cssBtnRed{
+  background-color:orangered;
+}
+.cssBtnGray{
+  background-color: gray;
+}
+.cssCompareView{
+  display:none;
+  border: 1px solid #D2D2D2;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  width: 560px;
+  height: 500px;
+  background-color: snow;
+/*   background-color: rgba(212, 220, 250, 0.82); */
+  position: fixed;
+  top: 10%;
+  right: 44px;
+  background-repeat: no-repeat;
+  background-position:center;
+}
+.cssSection {
+  width: 280px;
+  float: left;
+  overflow: auto;
+}
+.cssHGroup {
+  margin: 1em 10px;
+  padding-bottom: 10px;
+  border-bottom-style: solid;
+  border-color: #37C;
+  border-width: 1px;
+}
+.cssTitle {
+  color: #37C;
+  font-size: 150%;
+  padding-left: 10px;
+}
+.cssTitleBtn {
+  cursor: pointer;
+  float: right;
+  padding-top: 5px;
+  padding-right: 5px;
+  font-size: 120%;
+  color: lightSlateGray;
+}
+#compareView div{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+#compareView p{
+  color: #5C607C;
+  line-height: 20px;
+  font-size: 14px;
+}
+#compareView p.black{
+  color: black;
+  font-weight: bold;
+}
+#compareView p.black_big{
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+}
+#compareView span.black{
+  color: black;
+  font-size: 14px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+#compageView h2{
+  color: #69C;
+  background-color: #EDF6FB;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.cssMuliteResumeBox {
+  border: 1px solid #37c;
+  padding: 6px 0px 6px 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 5px #37c;
+/*   background-color: white; */
+/*   background: rgba(220, 220, 220, 0.4); */
+}
+.cssMuliteResumeBoxSelected {
+  border: 1px solid #37c;
+  padding: 6px 0px 6px 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 5px #37c;
+/*   background-color: white; */
+  background: #4F95FF;
+}
+.cssResumeNameText{
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  font-size: 17px;
+}

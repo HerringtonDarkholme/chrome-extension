@@ -1,0 +1,26 @@
+{
+  "name": "Innocode Chrome Extension",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "The first extension that I made.",
+  "browser_action": {
+    "default_icon": "img/blue.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://rd.zhaopin.com/resumepreview/resume/*", "file://*/*"],
+      "js": [
+      	"js/libs/jquery-1.7.2.min.js",
+      	"js/resume-formats/zhaopinNew.js",
+      	"js/content-script.js",
+        "js/libs/compare.js"
+      ],
+      "css": ["css/style.css"]
+    }
+  ],
+  "permissions": [
+  	"tabs",
+  	"*://*/*", "file://*/*"
+  ]
+}
