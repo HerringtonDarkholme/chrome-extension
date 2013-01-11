@@ -17,18 +17,20 @@
   /*background-color:springGreen;*/
   -webkit-transition: background 0.5s;
   border: 1px solid #DDD;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.7), 0 0 4px 0px rgba(100,100,100,0.2), 0 0 6px 0px rgba(200,200,200,0.1);
   border-radius: 15px; 
   width: 30px;
   height: 30px; 
   top:5px;
   left: 5px;
   position: absolute;
+  opacity: 0.7;
 }
 
 .cssBtnGreen:hover{
   background: -webkit-linear-gradient(top, #d2ff52 0%,#91e842 100%);
   -webkit-transition: background 2s;
+  opacity: 1;
 }
 
 .cssBtnRed{
@@ -40,8 +42,8 @@
 .cssCompareView{
   display:none;
   border: 1px solid #D2D2D2;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  width: 560px;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
+  width: 580px;
   height: 500px;
   background-color: snow;
 /*   background-color: rgba(212, 220, 250, 0.82); */
@@ -55,7 +57,17 @@
   width: 280px;
   float: left;
   overflow: auto;
+  max-height: 400px;
 }
+
+.cssCompareView section:nth-child(1){
+  width: 290px;
+}
+
+#remoteResume{
+  width: 295px;
+}
+
 .cssHGroup {
   margin: 1em 10px;
   padding-bottom: 10px;
@@ -67,6 +79,8 @@
   color: #37C;
   font-size: 150%;
   padding-left: 10px;
+  text-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+  font-family: 黑体;
 }
 .cssTitleBtn {
   cursor: pointer;
@@ -93,6 +107,7 @@
   color: black;
   font-size: 17px;
   font-weight: bold;
+  padding: 4px;
 }
 #compareView span.black{
   color: black;
@@ -100,32 +115,83 @@
   margin-right: 10px;
   margin-left: 10px;
 }
-#compageView h2{
+#compareView h2{
   color: #69C;
   background-color: #EDF6FB;
   font-weight: bold;
   margin-top: 10px;
+  padding: 0px 0px;
 }
 
 .cssMuliteResumeBox {
   border: 1px solid #37c;
   padding: 6px 0px 6px 8px;
   margin-bottom: 10px;
+  width: 250px;
   box-shadow: 0 0 5px #37c;
+  max-height: 25px;
+  overflow: hidden;
+  -webkit-transition: all .3s ease;
 /*   background-color: white; */
 /*   background: rgba(220, 220, 220, 0.4); */
 }
+
+.cssMuliteResumeBox:hover {
+  max-height: inherit;
+  -webkit-animation: hoverColorChange 0.48s ease-in-out;
+}
+
+@-webkit-keyframes hoverColorChange{
+  0% {background-color: transparent;}
+  40% {background-color: rgba(19,69,200,0.2);}
+  100% {background-color: rgba(0,0,0,0);}
+}
+
 .cssMuliteResumeBoxSelected {
-  border: 1px solid #37c;
+  position: relative;
+  border: 3px solid #37c;
   padding: 6px 0px 6px 8px;
   margin-bottom: 10px;
   box-shadow: 0 0 5px #37c;
 /*   background-color: white; */
-  background: #4F95FF;
+  /*background: #4F95FF;*/
+  max-height: inherit;
 }
+
+.cssMuliteResumeBoxSelected:after{
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  content: "√";
+  border-right: 8px solid #37c;
+  border-bottom: 8px solid #37c;
+  border-top: 8px solid transparent;
+  border-left: 8px solid transparent;
+  color: #fff;
+  font-size: 10px;
+  padding: 0px;
+}
+
 .cssResumeNameText{
   text-align: center;
   color: black;
   font-weight: bold;
   font-size: 17px;
+}
+
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }

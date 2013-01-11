@@ -27,11 +27,12 @@ var ZhaoPin ={
     console.log('name ok')
 
     var info = $('.summary-top').text()
-    data['gender'] = /男|女/.exec(info)[0]=='男'?'male':'female'
+    var gender = /男|女/.exec(info), marital = /(已婚)|(未婚)|(保密)/.exec(info)
+    if (gender) data['gender'] = gender[0]=='男'?'male':'female'
     var y = /\d{4}/.exec(info)[0], //assume nobody will live or work longer than 1000 
         m = parseInt( /\d+月/.exec(info)[0].slice(0,-1) ) -1
     data['birth'] = new Date(y,m)
-    data['marital'] = /(已婚)|(未婚)|(保密)/.exec(info)[0]=='已婚'?'married':(/(已婚)|(未婚)|(保密)/.exec(info)[0]=='未婚'?'unmarried':'secret')
+    if (marital) data['marital'] = marital[0]=='已婚'? 'married': marital[0]=='未婚'?'unmarried':'secret'
 
     console.log('info ok')
 

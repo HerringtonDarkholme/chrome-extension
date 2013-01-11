@@ -3,11 +3,12 @@
 /**
  * 在符合条件的网站和页面右边栏上增加新的按钮
  */
-var api_response
-var host ='http://dine.innocodex.com:8011'
-var current_selected_id;  //当前选择的简历的id值
+  var api_response
+  var host ='http://dine.innocodex.com:8011'
+  var current_selected_id;  //当前选择的简历的id值
  
 $(document).ready(function() { 
+
   console.log("content script init");
   var $compareBtn = $("<div id='compareIcon' class='cssCompareBtn'><div></div></div>"); //add an inner element here
   var $compareView = $("<div id='compareView' class='cssCompareView'><section id='remoteData' class='cssSection'><hgroup class='cssHGroup'><span id='remoteTtile' class='cssTitle'>Innocodex -</span><span id='remoteClientName' class='cssTitle'>&nbsp;</span><span class='cssTitleBtn'>查看</span></hgroup></section><section id='localData' class='cssSection'><hgroup class='cssHGroup'><span id='localTitle' class='cssTitle'>智联招聘 - </span><span id='localClientName' class='cssTitle'>&nbsp;</span><span class='cssTitleBtn'>更新</span></hgroup></section><section id='remoteResume' class='cssSection'>&nbsp;</section><section id='localResume' class='cssSection'></section></div>");
@@ -18,15 +19,17 @@ $(document).ready(function() {
   //load resume and remote data init compareView
   //这个是不是没用了？要不要删掉？
   function update(){
-    alert("afsafs");
+    request={
+      'id-type': localResume['id-type'],
+      'id-value': localResume['id-value'],
+      'data' : localResume
+    }
+    if (current_selected_id != undefined){
+      request['oid'] = current_selected_id;
+    }
     $.ajax({
       url: host + '/profile/update.api',
-      data: {
-      'request':JSON.stringify({
-        'id-type': localResume['id-type'],
-        'id-value':localResume['id-value'],
-        'data' : localResume
-      })},
+      data: { 'request':JSON.stringify(request) },
       dataType: 'json',
       type: 'post',
       success: function(resp){
@@ -34,7 +37,7 @@ $(document).ready(function() {
         else {
         
           render('remote',$('#remoteResume'),resp.data)
-          console.log("remote data= "+allPrpos(resp));
+          //console.log("remote data= "+allPrpos(resp));
           $('span:contains("更新")').unbind('click')
           $('span:contains("查看")').bind('click',function(){window.open(host+'/profile?action=edit&id='+resp.data._id)})
         }
@@ -84,7 +87,7 @@ $(document).ready(function() {
             $compareBtn.children().addClass("cssBtnRed");
         }else {
             $compareBtn.children().addClass('cssBtnGreen');
-            console.log("remote call return msg: "+allPrpos(resp));
+            //console.log("remote call return msg: "+allPrpos(resp));
             render('remote',$('#remoteResume'),resp.suggestion) 
         }
       },
@@ -97,12 +100,12 @@ $(document).ready(function() {
     
     /*     判断当前对比页面compareView显示状态，控制打开和关闭 */
     $compareBtn.toggle(function(){
-      /*     alert("显示信息对比页面"); */
+         //alert("显示信息对比页面"); 
       
       $compareView.show();
 
     },function(){
-      /*     alert("隐藏信息对比页面") */
+           //alert("隐藏信息对比页面") 
       
       $compareView.hide();
       
@@ -118,16 +121,17 @@ function render(type,target,data){
   // [jQuery Object] : the element to be modified
   // data : resume dictionary. remote data and local data should be processed differently
   if(type == 'remote'){
-    console.log("render remote data to div");
+    //console.log("render remote data to div");
     var isArray = Object.prototype.toString.apply(data) === '[object Array]';
     if(isArray){
     /* for get muitle resume from remote server
      * 当返回多条数据时，在remote区只显示简历的基本信息，当mouse over时能展开，并可选定以便更新
      */
-        console.log("remote data is array");
+      console.log("remote data is array");
+      var remoteResume = $("#remoteResume")
       for(var i=0; i<data.length; i++){
-        console.log("data "+i + " = "+allPrpos(ele));
         var ele = data[i];
+
         var gender=ele['gender']=='male'?'男':'女';
         var marital=ele['marital']=='married'?'已婚':'未婚';
           var teststr= "<div class='cssMuliteResumeBox' id='"+ ele._id +"'><p class='black_big'>"+ ele['name'] +" "+ gender + " " + ele['birth'].split('-')[0] + " " + marital +"</p>";
@@ -135,47 +139,52 @@ function render(type,target,data){
           // add work exp data
           if(ele.hasOwnProperty('career')){
             teststr +=("<p class='black'>工作经历</p>");
-            for ( var i=0; i<ele['career'].length; i++) {
-              work = ele['career'][i];
-              console.log("career = " + allPrpos(work));
-              
+            //Caveat! Do not use the same iterator in a loop that is inside a loop that uses the same iterator!!
+            for ( var j=0; j<ele['career'].length; j++) {
+              work = ele['career'][j];
+              //console.log("career = " + allPrpos(work));          
               //for Remote render
               teststr += (('<p>' + work['from'] + ' ~ '
                   + work['to'] + "</p>").replace('undefined', '至今'));
-              teststr += ("<p><span class='black'>" + work['organization'] + "</span><span class='black'>" + work['title'] + "</span></p>");
-
-            
+              teststr += ("<p><span class='black'>" + work['organization'] + "</span><span class='black'>" 
+                + work['title'] + "</span></p>");
             }
-            // add edu exp 好像返回的没有edu字段，要确认是不是需要
-            if(data.hasOwnProperty('education')){
-              teststr += ("<p class='black'>教育经历</p>")
-              for ( var i=0; i<data['education'].length; i++) {
-                    school = data['education'][i];
-                    console.log("edu data "+i + " = "+allPrpos(school));
-                    
-
-                    teststr += ('<p>' + school['from'] + ' ~ '
-                        + school['to']
-                        + "</p>".replace('undefined', '至今'));
-                    teststr += ("<p><span class='black'>" + school['organization'] + "</span><span class='black'>" + school['title'] + "</span></p>");
-                        
-              }
+          }
+          if(ele.hasOwnProperty('education')){
+            teststr += ("<p class='black'>教育经历</p>")
+            for ( var j=0; j<ele['education'].length; j++) {
+                  var school = ele['education'][j];
+                  if(typeof school == 'object' && school != null){
+                     school['from'] = school['from']['date'].split('-');
+                    if ( school.hasOwnProperty('to') ){
+                      school['to'] = school.to.date.split('-');
+                    }else{school['to']=['NaN','NaN']}
+                    teststr += ('<p>' + school['from'][0]+'-'+school['from'][1]+ ' ~ '
+                        + school['to'][0]+'-'+school['to'][1]
+                        + "</p>").replace('NaN-NaN', '至今');
+                    teststr += ("<p><span class='black'>" + school['organization'] + "</span><span class='black'>" + school['degree'] + "</span></p>");
+                  }
             }
           }
           
-          $("#remoteResume").append(teststr);
-          
-    /*
-$(".cssMuliteResumeBox").click(function() {
-      alert("adfsdf");
-    });
-*/
-      }
+          remoteResume.append(teststr);
+    
+        }
+        remoteResume.append("<div class='cssMuliteResumeBox' id='undefined'><p class='black_big'>新建档案</p>");
       $('.cssMuliteResumeBox').click(function(e) { 
+        var self = $(this);
         console.log("select a resume "+ $(this).attr('id'));
-        current_selected_id = $(this).attr('id');
-        $('.cssMuliteResumeBox').removeClass('cssMuliteResumeBoxSelected');
-        $(this).addClass("cssMuliteResumeBoxSelected");
+        if (self.hasClass('cssMuliteResumeBoxSelected')){
+          self.removeClass('cssMuliteResumeBoxSelected');
+          current_selected_id = undefined;
+        }
+        else{
+          $('.cssMuliteResumeBox').removeClass('cssMuliteResumeBoxSelected');
+          current_selected_id = self.attr('id')!='undefined'?self.attr('id'):undefined;
+          self.addClass("cssMuliteResumeBoxSelected");
+        }
+        
+        
         
        });
       
@@ -187,20 +196,26 @@ $(".cssMuliteResumeBox").click(function() {
       $("#remoteClientName").text(data['name']);
       var gender=data['gender']=='male'?'男':'女';
       var marital=data['marital']=='married'?'已婚':'未婚';
-      target.html($("<div id='localBasicProfile'><p class='cssResumeNameText'>"+ gender +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data['birth']['date'].toString().split('-')[0]+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+marital+'</p></div>'));
+      target.html($("<div id='localBasicProfile'><p class='cssResumeNameText'>"
+        + gender +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data['birth']['date'].toString().split('-')[0]
+        +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+marital+'</p></div>'));
       if(data.hasOwnProperty('career')){
         target.append("<div id='localWorkExp'><h2>工作经历</h2></div>");
         
         for ( var i=0; i<data['career'].length; i++) {
             work = data['career'][i];
             //for Remote render!
-            work['from'] = work.from.date.toString().split('-')
-            work['to'] = work.to.date.toString().split('-')
-            $('#localWorkExp').append(('<p><span>' + work['from'][0] + '-'
-                + work['from'][1] + '</span> ~ <span>'
-                + work['to'][0]+ '-' + work['to'][1]
-                + "</span></p><p style='color:black;'><strong>" + work['organization'] + '</strong></p>')
-                .replace('NaN-NaN', '至今'));
+            if(typeof work == 'object' && work != null){    
+              work['from'] = work.from.date.toString().split('-')
+              if (work.hasOwnProperty('to')){
+                work['to'] = work.to.date.toString().split('-')||['NaN','NaN']
+              }else{work['to']=['NaN','NaN']}
+              $('#localWorkExp').append(('<p><span>' + work['from'][0] + '-'
+                  + work['from'][1] + '</span> ~ <span>'
+                  + work['to'][0]+ '-' + work['to'][1]
+                  + "</span></p><p style='color:black;'><strong>" + work['organization'] + '</strong></p>')
+                  .replace('NaN-NaN', '至今'));
+            }
         } 
       }
     
@@ -208,13 +223,19 @@ $(".cssMuliteResumeBox").click(function() {
       target.append("<div id='localEduExp'><h2>教育经历</h2></div>")
       for ( var i=0; i<data['education'].length; i++) {
             school = data['education'][i];
-            school['from'] = school.from.date.toString().split('-')
-            school['to'] = school.to.date.toString().split('-')
-            $('#localEduExp').append(('<p><span>' + school['from'][0] + '-'
-                + school['from'][1] + '</span> ~ <span>'
-                + school['to'][0] + '-' + school['to'][1]
-                + "</span></p><p style='color:black;'><strong>" + school['organization'] + '</strong></p>')
-                .replace('NaN-NaN', '至今'));
+            if(typeof school == 'object' && school != null){              
+              school['from'] = school.from.date.toString().split('-')
+              if (school.hasOwnProperty('to')){
+                school['to'] = school.to.date.toString().split('-')||['NaN','NaN']
+              }else{
+                school['to']=['NaN','NaN']
+              }
+              $('#localEduExp').append(('<p><span>' + school['from'][0] + '-'
+                  + school['from'][1] + '</span> ~ <span>'
+                  + school['to'][0] + '-' + school['to'][1]
+                  + "</span></p><p style='color:black;'><strong>" + school['organization'] + '</strong></p>')
+                  .replace('NaN-NaN', '至今'));
+            }
       }
     }
     
@@ -242,11 +263,14 @@ $(".cssMuliteResumeBox").click(function() {
       
       for ( var i=0; i<data['career'].length; i++) {
           work = data['career'][i];
-          $('#localWorkExp').append(('<p><span>' + work['from'].getFullYear() + '-'
-              + work['from'].getMonth() + '</span> ~ <span>'
-              + work['to'].getFullYear() + '-' + work['to'].getMonth()
-              + "</span></p><p style='color:black;'><strong>" + work['organization'] + '</strong></p>')
-              .replace('NaN-NaN', '至今'));
+          if(typeof work == 'object' && work != null) {          
+            $('#localWorkExp').append(('<p><span>' + work['from'].getFullYear() + '-'
+                + work['from'].getMonth() + '</span> ~ <span>'
+                + work['to'].getFullYear() + '-' + work['to'].getMonth()
+                + "</span></p><p style='color:black;'><strong>" + work['organization'] + '</strong></p>'
+                +'<p style="color:black;">' +work['title']+'</p>')
+                .replace('NaN-NaN', '至今'));
+          }
       }
       
     }
@@ -255,11 +279,14 @@ $(".cssMuliteResumeBox").click(function() {
       target.append("<div id='localEduExp'><h2>教育经历</h2></div>")
       for ( var i=0; i<data['education'].length; i++) {
             school = data['education'][i];
-            $('#localEduExp').append(('<p><span>' + school['from'].getFullYear() + '-'
-                + school['from'].getMonth() + '</span> ~ <span>'
-                + school['to'].getFullYear() + '-' + school['to'].getMonth()
-                + "</span></p><p style='color:black;'><strong>" + school['organization'] + '</strong></p>')
-                .replace('NaN-NaN', '至今'));
+            if(typeof school == 'object' && school != null) {              
+              $('#localEduExp').append(('<p><span>' + school['from'].getFullYear() + '-'
+                  + school['from'].getMonth() + '</span> ~ <span>'
+                  + school['to'].getFullYear() + '-' + school['to'].getMonth()
+                  + "</span></p><p style='color:black;'><strong>" + school['organization'] + '</strong></p>'
+                  +'<p style="color:black;">' +school['degree'] +'</p>')
+                  .replace('NaN-NaN', '至今'));
+            }
       }
     }
   }
@@ -306,7 +333,9 @@ function checkSite() {
  */
 function allPrpos(obj) { 
      // 用来保存所有的属性名称和值
+     
      var props = "";
+     
      // 开始遍历
      for(var p in obj){ 
          // 方法
